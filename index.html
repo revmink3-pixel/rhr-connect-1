@@ -9,7 +9,7 @@
     
     <meta property="og:type" content="website">
     <meta property="og:title" id="og-title" content="Digital Business Card">
-    <meta property="og:description" id="og-desc" content="Tap to save my contact details instantly.">
+    <meta property="og:description" id="og-desc" content="Connect via my official digital card.">
     <meta property="og:image" id="og-image" content="">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,34 +17,33 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; transition: background-color 0.5s ease; }
-        .glass-card { transition: all 0.4s ease; border-radius: 2.5rem; }
+        .glass-card { transition: all 0.4s ease; border-radius: 2.5rem; background: #ffffff; }
         
         /* Themes */
-        .theme-classic { background: #ffffff; border-radius: 2.5rem; }
-        .theme-border { background: #ffffff; border: 2px solid #e2e8f0; }
-        .theme-glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); }
-        .theme-minimal { background: #ffffff; border-radius: 1rem; box-shadow: none; border: 1px solid #f1f5f9; }
-        .theme-bold { background: #ffffff; border-top: 10px solid; }
+        .theme-classic { border-radius: 2.5rem; }
+        .theme-border { border: 2px solid #e2e8f0; }
+        .theme-glass { background: rgba(255, 255, 255, 0.7) !important; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); }
+        .theme-minimal { border-radius: 1rem; box-shadow: none; border: 1px solid #f1f5f9; }
+        .theme-bold { border-top: 12px solid; }
 
         .profile-img { width: 110px; height: 110px; object-fit: cover; border: 4px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .icon-box { min-width: 48px; min-height: 48px; flex: 1; display: flex; align-items: center; justify-content: center; border-radius: 1rem; background: #f8fafc; color: #64748b; border: 1px solid #f1f5f9; transition: all 0.3s; }
         .icon-box:hover { background: #eff6ff; color: #2563eb; transform: translateY(-2px); }
         .social-text-link { flex: 1; padding: 1rem; text-align: center; border-radius: 1rem; background: #f8fafc; border: 1px solid #f1f5f9; color: #334155; font-weight: 600; font-size: 0.8rem; transition: all 0.3s; }
-        .social-text-link:hover { background: #eff6ff; color: #2563eb; transform: translateY(-2px); }
         
-        #header-bg, #save-btn-view, body { transition: background-color 0.3s, color 0.3s; }
+        #header-bg, #save-btn-view, body { transition: all 0.3s ease; }
     </style>
 </head>
-<body id="body-bg" class="min-h-screen flex items-center justify-center p-4 bg-[#0100f0]">
+<body id="body-bg" class="min-h-screen flex items-center justify-center p-4 bg-slate-100">
 
-    <div id="main-loader" class="text-white font-medium animate-pulse italic text-center">
+    <div id="main-loader" class="text-slate-500 font-medium animate-pulse italic text-center">
         Connecting with RHR Cloud...
     </div>
     
     <div id="card-container" class="max-w-sm w-full glass-card shadow-2xl overflow-hidden hidden">
-        <div id="header-bg" class="h-28 bg-[#1e293b]"></div> 
+        <div id="header-bg" class="h-28 bg-slate-800"></div> 
         <div class="px-6 pb-8 -mt-14 text-center">
-            <img id="view-photo" src="" alt="Profile" class="profile-img rounded-full mx-auto mb-3 bg-slate-100">
+            <img id="view-photo" src="" alt="Profile" class="profile-img rounded-full mx-auto mb-3 bg-slate-200">
             <h1 id="view-name" class="text-xl font-bold tracking-tight text-slate-800"></h1>
             <p id="view-title" class="text-blue-600 font-bold text-[10px] uppercase tracking-widest italic"></p>
             <p id="view-company" class="text-slate-400 text-[10px] font-bold mb-4 uppercase tracking-wider"></p>
@@ -53,7 +52,7 @@
                 <p id="view-bio" class="text-slate-500 text-xs leading-relaxed italic"></p>
             </div>
 
-            <button id="save-btn-view" onclick="saveVCF()" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-bold text-sm mb-6 flex items-center justify-center gap-2 shadow-lg hover:opacity-90 transition-all">
+            <button id="save-btn-view" onclick="saveVCF()" class="w-full bg-slate-800 text-white py-4 rounded-2xl font-bold text-sm mb-6 flex items-center justify-center gap-2 shadow-lg hover:opacity-90 transition-all">
                 <i data-lucide="user-plus" class="w-4 h-4"></i> Save Contact
             </button>
 
@@ -88,16 +87,15 @@
     </div>
 
     <script>
-        // আপনার Apps Script URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrsre7RRouL9YpUYu3087DvxE0AJjvE-6Zpjz5q_rLJILuuXoJJsurQ_7aReGz5zuBsw/exec  ";
+        // আপনার নতুন Apps Script URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgnZ6vcgN8p_-Ba6WMoeu70vKzAYdlWi8VevJEe70MFtFHpkHXJcEadBjrEzNuW4bxEw/exec";
         const urlParams = new URLSearchParams(window.location.search);
-        const PROFILE_ID = urlParams.get('id') || "RHR-BIZ-01";
+        const PROFILE_ID = urlParams.get('id') || "RHR-BIZ-01"; // ডিফল্ট আইডি
         let userData = {};
 
         async function init() {
             lucide.createIcons();
             try {
-                // Google Sheet থেকে ডাটা ফেচ করা
                 const res = await fetch(`${SCRIPT_URL}?id=${PROFILE_ID}`);
                 const result = await res.json();
                 
@@ -107,15 +105,16 @@
                     applySettings();
                 } else {
                     document.getElementById('main-loader').innerText = "Card Not Found!";
+                    document.getElementById('main-loader').classList.remove('animate-pulse');
                 }
             } catch (e) { 
                 console.error(e); 
-                document.getElementById('main-loader').innerText = "Connection Error!";
+                document.getElementById('main-loader').innerText = "Connection Error! Please check your script deployment.";
             }
         }
 
         function renderView() {
-            // Mapping Data to UI
+            // ডাটা ম্যাপিং
             document.getElementById('view-photo').src = userData.Photo || 'https://via.placeholder.com/150';
             document.getElementById('view-name').innerText = userData.Name;
             document.getElementById('view-title').innerText = userData.Title;
@@ -130,7 +129,7 @@
             document.getElementById('link-facebook').href = userData.Facebook;
             document.getElementById('link-linkedin').href = userData.LinkedIn;
 
-            // SEO Updates
+            // মেটা ডাটা এবং টাইটেল আপডেট
             document.title = `${userData.Name} | Digital Business Card`;
             document.getElementById('og-title').content = userData.Name;
             document.getElementById('og-image').content = userData.Photo;
@@ -141,8 +140,8 @@
         }
 
         function applySettings() {
-            // শিট থেকে কালার এবং থিম অ্যাপ্লাই করা
-            const bg = userData.BG_Color || "#0100f0";
+            // শিট থেকে কালার এবং থিম প্রয়োগ
+            const bg = userData.BG_Color || "#f1f5f9";
             const head = userData.Header_Color || "#1e293b";
             const theme = userData.Theme || "theme-classic";
 
@@ -150,16 +149,25 @@
             document.getElementById('header-bg').style.backgroundColor = head;
             document.getElementById('save-btn-view').style.backgroundColor = head;
             
+            // থিম ক্লাস অ্যাড করা
             const card = document.getElementById('card-container');
             card.classList.remove('theme-classic', 'theme-border', 'theme-glass', 'theme-minimal', 'theme-bold');
             card.classList.add(theme);
+
+            // Bold থিমের জন্য স্পেশাল বর্ডার কালার
+            if(theme === 'theme-bold') {
+                card.style.borderTopColor = head;
+            }
         }
 
         function saveVCF() {
             const vcf = `BEGIN:VCARD\nVERSION:3.0\nFN:${userData.Name}\nORG:${userData.Company}\nTITLE:${userData.Title}\nTEL:${userData.Mobile}\nEMAIL:${userData.Email}\nURL:${userData.Website}\nEND:VCARD`;
             const blob = new Blob([vcf], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `${userData.Name}.vcf`; a.click();
+            const a = document.createElement('a'); 
+            a.href = url; 
+            a.download = `${userData.Name}.vcf`; 
+            a.click();
         }
 
         window.onload = init;
