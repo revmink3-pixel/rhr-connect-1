@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title id="page-title">Digital Business Card | RHR Smart Way</title>
+    <meta name="description" id="meta-desc" content="Connect with me via my official digital business card.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" id="og-title" content="Digital Business Card">
+    <meta property="og:description" id="og-desc" content="Tap to save my contact details instantly.">
+    <meta property="og:image" id="og-image" content="">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.5s ease; }
+        .glass-card { transition: all 0.4s ease; border-radius: 2.5rem; }
+        
+        /* Themes */
+        .theme-classic { background: #ffffff; border-radius: 2.5rem; }
+        .theme-border { background: #ffffff; border: 2px solid #e2e8f0; }
+        .theme-glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); }
+        .theme-minimal { background: #ffffff; border-radius: 1rem; box-shadow: none; border: 1px solid #f1f5f9; }
+        .theme-bold { background: #ffffff; border-top: 10px solid; }
+
+        .profile-img { width: 110px; height: 110px; object-fit: cover; border: 4px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .icon-box { min-width: 48px; min-height: 48px; flex: 1; display: flex; align-items: center; justify-content: center; border-radius: 1rem; background: #f8fafc; color: #64748b; border: 1px solid #f1f5f9; transition: all 0.3s; }
+        .icon-box:hover { background: #eff6ff; color: #2563eb; transform: translateY(-2px); }
+        .social-text-link { flex: 1; padding: 1rem; text-align: center; border-radius: 1rem; background: #f8fafc; border: 1px solid #f1f5f9; color: #334155; font-weight: 600; font-size: 0.8rem; transition: all 0.3s; }
+        .social-text-link:hover { background: #eff6ff; color: #2563eb; transform: translateY(-2px); }
+        
+        #header-bg, #save-btn-view, body { transition: background-color 0.3s, color 0.3s; }
+    </style>
+</head>
+<body id="body-bg" class="min-h-screen flex items-center justify-center p-4 bg-[#0100f0]">
+
+    <div id="main-loader" class="text-white font-medium animate-pulse italic text-center">
+        Connecting with RHR Cloud...
+    </div>
+    
+    <div id="card-container" class="max-w-sm w-full glass-card shadow-2xl overflow-hidden hidden">
+        <div id="header-bg" class="h-28 bg-[#1e293b]"></div> 
+        <div class="px-6 pb-8 -mt-14 text-center">
+            <img id="view-photo" src="" alt="Profile" class="profile-img rounded-full mx-auto mb-3 bg-slate-100">
+            <h1 id="view-name" class="text-xl font-bold tracking-tight text-slate-800"></h1>
+            <p id="view-title" class="text-blue-600 font-bold text-[10px] uppercase tracking-widest italic"></p>
+            <p id="view-company" class="text-slate-400 text-[10px] font-bold mb-4 uppercase tracking-wider"></p>
+            
+            <div class="mb-6 px-2">
+                <p id="view-bio" class="text-slate-500 text-xs leading-relaxed italic"></p>
+            </div>
+
+            <button id="save-btn-view" onclick="saveVCF()" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-bold text-sm mb-6 flex items-center justify-center gap-2 shadow-lg hover:opacity-90 transition-all">
+                <i data-lucide="user-plus" class="w-4 h-4"></i> Save Contact
+            </button>
+
+            <div class="flex justify-center gap-2 mb-3">
+                <a id="link-mobile" href="#" class="icon-box"><i data-lucide="phone" class="w-5 h-5"></i></a>
+                <a id="link-email" href="#" class="icon-box"><i data-lucide="mail" class="w-5 h-5"></i></a>
+                <a id="link-website" href="#" target="_blank" class="icon-box"><i data-lucide="globe" class="w-5 h-5"></i></a>
+            </div>
+
+            <div class="flex justify-center gap-2 mb-8">
+                <a id="link-facebook" href="#" target="_blank" class="social-text-link">Facebook</a>
+                <a id="link-linkedin" href="#" target="_blank" class="social-text-link">LinkedIn</a>
+            </div>
+
+            <div class="space-y-3 text-left">
+                <div class="flex gap-4 items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-slate-400 mt-1"></i>
+                    <div>
+                        <p class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Office Address</p>
+                        <p id="view-address" class="text-sm text-slate-700 font-semibold"></p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
+                    <i data-lucide="briefcase" class="w-5 h-5 text-slate-400 mt-1"></i>
+                    <div>
+                        <p class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Services</p>
+                        <p id="view-services" class="text-sm text-slate-700 font-semibold"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // আপনার Apps Script URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxTTq1XZykPeviwJBS9BhLDpF7WqhRG3ZmN5KICeLZB93vdIVIouRw70SJuvufEnREmug/exec";
+        const urlParams = new URLSearchParams(window.location.search);
+        const PROFILE_ID = urlParams.get('id') || "RHR-BIZ-01";
+        let userData = {};
+
+        async function init() {
+            lucide.createIcons();
+            try {
+                // Google Sheet থেকে ডাটা ফেচ করা
+                const res = await fetch(`${SCRIPT_URL}?id=${PROFILE_ID}`);
+                const result = await res.json();
+                
+                if (result.success) { 
+                    userData = result.data; 
+                    renderView(); 
+                    applySettings();
+                } else {
+                    document.getElementById('main-loader').innerText = "Card Not Found!";
+                }
+            } catch (e) { 
+                console.error(e); 
+                document.getElementById('main-loader').innerText = "Connection Error!";
+            }
+        }
+
+        function renderView() {
+            // Mapping Data to UI
+            document.getElementById('view-photo').src = userData.Photo || 'https://via.placeholder.com/150';
+            document.getElementById('view-name').innerText = userData.Name;
+            document.getElementById('view-title').innerText = userData.Title;
+            document.getElementById('view-company').innerText = userData.Company;
+            document.getElementById('view-bio').innerText = userData.Bio || "";
+            document.getElementById('view-address').innerText = userData.Address;
+            document.getElementById('view-services').innerText = userData.Services;
+
+            document.getElementById('link-mobile').href = `tel:${userData.Mobile}`;
+            document.getElementById('link-email').href = `mailto:${userData.Email}`;
+            document.getElementById('link-website').href = userData.Website;
+            document.getElementById('link-facebook').href = userData.Facebook;
+            document.getElementById('link-linkedin').href = userData.LinkedIn;
+
+            // SEO Updates
+            document.title = `${userData.Name} | Digital Business Card`;
+            document.getElementById('og-title').content = userData.Name;
+            document.getElementById('og-image').content = userData.Photo;
+
+            document.getElementById('main-loader').classList.add('hidden');
+            document.getElementById('card-container').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function applySettings() {
+            // শিট থেকে কালার এবং থিম অ্যাপ্লাই করা
+            const bg = userData.BG_Color || "#0100f0";
+            const head = userData.Header_Color || "#1e293b";
+            const theme = userData.Theme || "theme-classic";
+
+            document.body.style.backgroundColor = bg;
+            document.getElementById('header-bg').style.backgroundColor = head;
+            document.getElementById('save-btn-view').style.backgroundColor = head;
+            
+            const card = document.getElementById('card-container');
+            card.classList.remove('theme-classic', 'theme-border', 'theme-glass', 'theme-minimal', 'theme-bold');
+            card.classList.add(theme);
+        }
+
+        function saveVCF() {
+            const vcf = `BEGIN:VCARD\nVERSION:3.0\nFN:${userData.Name}\nORG:${userData.Company}\nTITLE:${userData.Title}\nTEL:${userData.Mobile}\nEMAIL:${userData.Email}\nURL:${userData.Website}\nEND:VCARD`;
+            const blob = new Blob([vcf], { type: 'text/vcard' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = `${userData.Name}.vcf`; a.click();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
